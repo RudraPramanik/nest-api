@@ -16,13 +16,14 @@ import { title } from 'process';
 import { promises } from 'dns';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTaskFilterDto } from './dto/get-tasks-filter.dto';
+import { TaskStatusValidationPipe } from './pipes/task.status.validation.pipe';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private taskservice: TasksService) {}
 
   @Get()
-  getTasks(@Query() filterDto: GetTaskFilterDto): Task[] {
+  getTasks(@Query(ValidationPipe)  filterDto: GetTaskFilterDto): Task[] {
     if (Object.keys(filterDto).length) {
       this.taskservice.getTasksWithFilters(filterDto);
     } else {
@@ -44,7 +45,7 @@ export class TasksController {
   @Patch('/:id/status')
   updateTaskStatus(
     @Param('id') id: string,
-    @Body('status') status: TaskStatus,
+    @Body('status', TaskStatusValidationPipe) status: TaskStatus,
   ): Task {
     return this.taskservice.updateTaskStatus(id, status);
   }
