@@ -27,11 +27,18 @@ export class TasksService {
     return task;
   }
 
-  deleteTask(id: string): void {
-    const foundTaskIndex = this.tasks.findIndex((task) => task.id === id);
-    if (foundTaskIndex === -1) {
-      throw new NotFoundException(`Task with ID ${id} not found`);
-    }
-    this.tasks.splice(foundTaskIndex, 1);
+  // deleteTask(id: string): void {
+  //   const foundTaskIndex = this.tasks.findIndex((task) => task.id === id);
+  //   if (foundTaskIndex === -1) {
+  //     throw new NotFoundException(`Task with ID ${id} not found`);
+  //   this.tasks.splice(foundTaskIndex, 1);
+  // }
+  updateTaskStatus(id:string,  status: TaskStatus ) : Task{
+    const task= this.getTaskById(id)
+    task.status = status
+    return task
+  }
+  deleteTask(id:string) :void {
+    this.tasks = this.tasks.filter(task=> task.id !==id)
   }
 }
